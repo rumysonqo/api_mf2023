@@ -29,8 +29,17 @@ export const get_actividades = async (req,res)=>{
 
 export const get_sub_productos = async (req,res)=>{
     try{
-        const [prd]=await cnx.query('select distinct(cod_subfinalidad), sub_finalidad from meta_fisica_2023 where cod_programa = ? and cod_producto = ? and cod_actividad = ? order by cod_subfinalidad',[req.params.prg, req.params.prd, req.params.act]);
+        const [prd]=await cnx.query('select distinct(cod_subfinalidad), sub_finalidad from meta_fisica_2023 where cod_programa = ? and cod_producto = ? order by cod_subfinalidad',[req.params.prg, req.params.prd]);
         res.json(prd);
+    }catch(error){
+        return res.status(500).json({mensaje:'ocurrio un error'});
+    }
+}
+
+export const get_metas_subpro = async (req,res)=>{
+    try{
+        const [met]=await cnx.query('select nom_micro_red, nom_establecimiento, meta_fisica from meta_fisica_2023 where cod_programa = ? and cod_producto = ? and cod_subfinalidad = ? order by nom_micro_red, nom_establecimiento',[req.params.prg, req.params.prd, req.params.sub]);
+        res.json(met);
     }catch(error){
         return res.status(500).json({mensaje:'ocurrio un error'});
     }
